@@ -655,8 +655,8 @@
   });
 
   // Phase 2: after 2.5s, converge to center and morph into logo
-  setTimeout(convergencePhase, 2600);
-
+setTimeout(formLogoPhase, 1200);
+  
   function startFloat(el, index) {
     let t = index * 0.5;
     let raf;
@@ -678,33 +678,40 @@
     el._floatTick = tick;
   }
 
-  function convergencePhase() {
-    const splash = document.getElementById('splash');
-    const cx = splash.offsetWidth / 2;
-    const cy = splash.offsetHeight / 2;
+function formLogoPhase() {
 
-    letters.forEach((l, i) => {
-      const el = document.getElementById(l.id);
-      // Cancel float
-      cancelAnimationFrame(el._floatRaf);
+  const finalPositions = [
+    -180,
+    -120,
+    -60,
+    0,
+    60,
+    120,
+    180
+  ];
 
-      // Get current position
-      const rect = el.getBoundingClientRect();
-      const elCx = rect.left + rect.width / 2;
-      const elCy = rect.top  + rect.height / 2;
-      const dx = cx - elCx;
-      const dy = cy - elCy;
+  letters.forEach((l, i) => {
+    const el = document.getElementById(l.id);
 
-      el.style.transition = `transform 0.8s cubic-bezier(0.4,0,0.2,1) ${i*40}ms, opacity 0.5s ease ${i*40+500}ms`;
-      el.style.transform = `translate(${dx}px, ${dy}px) rotate(0deg) scale(0.6)`;
-      el.style.opacity = '0';
-    });
+    cancelAnimationFrame(el._floatRaf);
 
-    // Show assembled logo
-    setTimeout(() => {
-      document.getElementById('splash-logo').classList.add('visible');
-    }, 900);
-  }
+    el.style.transition =
+      `all 1.4s cubic-bezier(0.22,1,0.36,1) ${i * 80}ms`;
+
+    el.style.left = '50%';
+    el.style.top = '50%';
+
+    el.style.transform =
+      `translate(${finalPositions[i]}px,-50%) rotate(0deg)`;
+
+    el.style.opacity = '1';
+  });
+
+  setTimeout(() => {
+    document.getElementById('splash-tagline').style.opacity = '1';
+    document.getElementById('splash-enter').style.opacity = '1';
+  }, 1800);
+}
 })();
 
 /* ════════════════════════════════════════
